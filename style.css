@@ -22,6 +22,54 @@ html {
   min-height: 100%;
 }
 
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+.container {
+  width: 400px;
+  border: 2px solid var(--primary-dark);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #aaa;
+}
+
+.screen {
+  padding: 10px 20px;
+  border: 2px solid var(--primary-dark);
+  border-radius: 5px;
+}
+
+.buttons_container {
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.clear,
+.delete {
+  flex-grow: 5;
+}
+
+.button {
+  padding: 20px;
+  border: 2px solid var(--primary-dark);
+  border-radius: 5px;
+  background-color: #fefefe;
+  font-size: 20px;
+}
 
 .fa-github {
   color: var(--primary-dark);
