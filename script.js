@@ -1,31 +1,46 @@
-let currentInput = "";
+class Calculator {
+  constructor() {
+    this.currentInput = "";
+  }
 
-function clearDisplay() {
-  currentInput = "";
-  updateDisplay();
-}
+  // let currentInput = "";
 
-function appendNumber(number) {
-  currentInput += number;
-  updateDisplay();
-}
+  clearDisplay() {
+    this.currentInput = "";
+    this.updateDisplay();
+  }
 
-function appendOperator(operator) {
-  currentInput += operator;
-  updateDisplay();
-}
+  appendNumber(number) {
+    this.currentInput += number;
+    this.updateDisplay();
+  }
 
-function calculateResult() {
-  try {
-    const result = eval(currentInput);
-    currentInput = result.toString();
-    updateDisplay();
-  } catch {
-    currentInput = "Error";
-    updateDisplay();
+  appendOperator(operator) {
+    this.currentInput += operator;
+    this.updateDisplay();
+  }
+
+  calculateResult() {
+    try {
+      const result = this.evaluateExpression();
+      this.currentInput = result.toString();
+      this.updateDisplay();
+    } catch {
+      this.currentInput = "Error";
+      this.updateDisplay();
+    }
+  }
+
+  evaluateExpression() {
+    return eval(this.currentInput);
+  }
+
+  updateDisplay() {
+    const displayElement = document.getElementById("display");
+    if (displayElement) {
+      displayElement.value = this.currentInput;
+    }
   }
 }
 
-function updateDisplay() {
-  document.getElementById("display").value = currentInput;
-}
+const calculator = new Calculator();
