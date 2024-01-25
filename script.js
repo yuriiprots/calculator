@@ -32,7 +32,8 @@ class Calculator {
   }
 
   evaluateExpression() {
-    return eval(this.currentInput);
+    const sanitizedInput = this.currentInput.replace(/[^-()\d/*+.]/g, "");
+    return Function('"use strict";return (' + sanitizedInput + ")")();
   }
 
   updateDisplay() {
