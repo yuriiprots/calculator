@@ -9,6 +9,7 @@ let currentInput = "";
 function clearDisplay() {
   currentInput = "";
   updateDisplay();
+  lastOperationDisplay.innerHTML = "";
 }
 
 function appendNumber(number) {
@@ -22,17 +23,25 @@ function appendOperator(operator) {
 }
 
 function updateDisplay() {
-  const displayElement = document.getElementById("display");
-  if (displayElement) {
-    displayElement.value = currentInput;
+  const currentOperationDisplay = document.getElementById(
+    "currentOperationDisplay"
+  );
+  const lastOperationDisplay = document.getElementById("lastOperationDisplay");
+
+  if (currentOperationDisplay) {
+    currentOperationDisplay.innerHTML = currentInput;
+  }
+  if (currentInput.match(/[+\-*/]/)) {
+    if (lastOperationDisplay) {
+      lastOperationDisplay.innerHTML = currentInput;
+    }
   }
 }
 
-function parser(expression) {  
-  let number = expression.match(/\d+/);
-  let operator = expression.match(/[+\-*/]/);
-  
-}
+// function parser(expression) {
+//   let number = expression.match(/\d+/);
+//   let operator = expression.match(/[+\-*/]/);
+// }
 
 function addNumbers(first_operand, second_operand) {
   return first_operand + second_operand;
