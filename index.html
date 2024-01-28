@@ -21,7 +21,11 @@
 
     <main class="main">
       <div class="calculator">
-        <input type="text" id="display" readonly></input>
+        <!-- <input type="text" id="display" readonly></input> -->
+        <div class="display">
+          <div class="display-last" id="lastOperationDisplay"></div>
+          <div class="display-current" id="currentOperationDisplay" value="0"></div>
+        </div>
         <div class="buttons_container">
           <button class="clear" onclick="clearDisplay()">Clear</button>
           <button class="delete">Delete</button>
