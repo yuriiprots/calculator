@@ -28,14 +28,11 @@ function updateDisplay() {
   }
 }
 
-function parser(expression) {
-  let first_operand;
-  let operator;
-  let second_operand;
-
+function parser(expression) {  
+  let number = expression.match(/\d+/);
+  let operator = expression.match(/[+\-*/]/);
   
 }
-
 
 function addNumbers(first_operand, second_operand) {
   return first_operand + second_operand;
