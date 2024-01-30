@@ -15,7 +15,13 @@ let currentInput = "";
 let displayNumber = "";
 let currentOperator = "";
 
-equalsBtn.addEventListener("click", () => parser(currentInput));
+// equalsBtn.addEventListener("click", () => {
+//   parser(currentInput);
+// });
+
+const handleEquelsButtonClick = () => {
+  parser(currentInput);
+};
 
 function clearDisplay() {
   currentInput = "";
@@ -28,6 +34,7 @@ function appendNumber(number) {
   displayNumber += number;
   currentInput += number;
   currentOperationDisplay.innerHTML = displayNumber;
+  equalsBtn.addEventListener("click", handleEquelsButtonClick);
 }
 
 function appendOperator(operator) {
@@ -71,29 +78,33 @@ function appendOperator(operator) {
   // currentInput += operator;
   currentOperator = "";
   displayNumber = "";
+  equalsBtn.removeEventListener("click", handleEquelsButtonClick);
 }
 
 function parser(expression) {
   let first_operand;
   let operator;
   let second_operand;
+  let index;
 
   operators.forEach((op) => {
     if (expression.includes(op)) {
-      let index = expression.indexOf(op);
+      index = expression.indexOf(op);
       first_operand = Number(expression.slice(0, index));
       operator = expression[index];
-      second_operand = Number(
-        expression.slice(index + 1, expression.length - 1)
-      );
+      second_operand = Number(expression.slice(index + 1, expression.length));
     }
   });
+
+  // if (second_operand === undefined) return;
 
   console.log(first_operand, operator, second_operand);
   operate(first_operand, operator, second_operand);
 }
 
 function operate(first_operand, operator, second_operand) {
+  firstNumber = first_operand;
+  secondNumber = second_operand;
   if (operator === "+") addNumbers(first_operand, second_operand);
   if (operator === "-") subtractNumbers(first_operand, second_operand);
   if (operator === "*") multiplyNumbers(first_operand, second_operand);
@@ -102,7 +113,7 @@ function operate(first_operand, operator, second_operand) {
 
 function addNumbers(first_operand, second_operand) {
   let result = first_operand + second_operand;
-  lastOperationDisplay.innerHTML = currentInput;
+  lastOperationDisplay.innerHTML = currentInput + "=";
   currentOperationDisplay.innerHTML = result;
   currentInput = result.toString();
   console.log(currentInput);
@@ -110,7 +121,7 @@ function addNumbers(first_operand, second_operand) {
 
 function subtractNumbers(first_operand, second_operand) {
   let result = first_operand - second_operand;
-  lastOperationDisplay.innerHTML = currentInput;
+  lastOperationDisplay.innerHTML = currentInput + "=";
   currentOperationDisplay.innerHTML = result;
   currentInput = result.toString();
   console.log(currentInput);
@@ -118,7 +129,7 @@ function subtractNumbers(first_operand, second_operand) {
 
 function multiplyNumbers(first_operand, second_operand) {
   let result = first_operand * second_operand;
-  lastOperationDisplay.innerHTML = currentInput;
+  lastOperationDisplay.innerHTML = currentInput + "=";
   currentOperationDisplay.innerHTML = result;
   currentInput = result.toString();
   console.log(currentInput);
@@ -126,7 +137,7 @@ function multiplyNumbers(first_operand, second_operand) {
 
 function divideNumbers(first_operand, second_operand) {
   let result = first_operand / second_operand;
-  lastOperationDisplay.innerHTML = currentInput;
+  lastOperationDisplay.innerHTML = currentInput + "=";
   currentOperationDisplay.innerHTML = result;
   currentInput = result.toString();
   console.log(currentInput);
