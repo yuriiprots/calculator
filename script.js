@@ -3,6 +3,7 @@ const currentOperationDisplay = document.getElementById(
   "currentOperationDisplay"
 );
 const lastOperationDisplay = document.getElementById("lastOperationDisplay");
+const operatorBtns = document.querySelectorAll(".operator");
 
 let operators = ["+", "-", "*", "/"];
 // let digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -12,13 +13,9 @@ let operator;
 let secondNumber;
 let currentInput = "";
 let displayNumber = "";
+let currentOperator = "";
 
 equalsBtn.addEventListener("click", () => parser(currentInput));
-// equalsBtn.addEventListener("click", () => toggleButton(equalsBtn));
-
-// function toggleButton(button) {
-//   button.disabled = !button.disabled;
-// }
 
 function clearDisplay() {
   currentInput = "";
@@ -34,22 +31,47 @@ function appendNumber(number) {
 }
 
 function appendOperator(operator) {
-  currentInput += operator;
+  console.log(currentInput);
+  let operatorCount = currentInput
+    .split("")
+    .filter((char) => operators.includes(char)).length;
+
+  if (operatorCount === 1 && operators.includes(currentInput.slice(-1))) {
+    currentInput = currentInput.slice(0, -1) + operator;
+  } else {
+    currentInput += operator;
+  }
+  console.log(currentInput);
   lastOperationDisplay.innerHTML = currentInput;
+
+  // if (currentOperator.length === 0) {
+  //   currentOperator += operator;
+  //   currentInput += currentOperator;
+  // }
+  // if (currentOperator.length >= 1) {
+  //   currentOperator = operator;
+  // currentOperator = currentOperator.slice(0, -1);
+  // console.log(currentOperator);
+  // currentInput = currentInput.slice(0, -1) + currentOperator;
+  // }
+
+  // console.log(currentInput);
+  // operators.forEach((op) => {
+  //   if (currentInput.includes(op)) {
+  //     lastOperationDisplay.innerHTML = currentInput;
+  //   }
+  // if (!currentInput.includes(op)) {
+  //   currentInput += currentOperator;
+  //   lastOperationDisplay.innerHTML = currentInput;
+  // }
+  // });
+  // console.log(currentInput);
+  // currentInput += currentOperator;
+  // lastOperationDisplay.innerHTML = currentInput;
+  // currentInput += operator;
+  currentOperator = "";
   displayNumber = "";
 }
-
-// function updateDisplay(input) {
-//   if (currentOperationDisplay) {
-//     currentOperationDisplay.innerHTML = input;
-//   }
-
-//   if (input.match(/[+\-*/]/)) {
-//     if (lastOperationDisplay) {
-//       lastOperationDisplay.innerHTML = input;
-//     }
-//   }
-// }
 
 function parser(expression) {
   let first_operand;
@@ -69,14 +91,6 @@ function parser(expression) {
 
   console.log(first_operand, operator, second_operand);
   operate(first_operand, operator, second_operand);
-
-  // for (let i = 0; i < expression.length; i++) {
-  //   if(expression[i] === "+" || expression[i] === "-" || expression[i] === "*" || expression[i] === "/") {
-  //     first_operand = Number(expression.slice(0, i));
-  //     operator = expression[i];
-  //     second_operand = Number(expression.slice(i + 1));
-  //   }
-  // }
 }
 
 function operate(first_operand, operator, second_operand) {
@@ -90,89 +104,42 @@ function addNumbers(first_operand, second_operand) {
   let result = first_operand + second_operand;
   lastOperationDisplay.innerHTML = currentInput;
   currentOperationDisplay.innerHTML = result;
-  currentInput = result;
-  // let result = String(first_operand + second_operand);
-  // updateDisplay(result);
+  currentInput = result.toString();
+  console.log(currentInput);
 }
 
 function subtractNumbers(first_operand, second_operand) {
   let result = first_operand - second_operand;
   lastOperationDisplay.innerHTML = currentInput;
   currentOperationDisplay.innerHTML = result;
-  currentInput = result;
-
-  // let result = String(first_operand - second_operand);
-  // updateDisplay(result);
+  currentInput = result.toString();
+  console.log(currentInput);
 }
 
 function multiplyNumbers(first_operand, second_operand) {
   let result = first_operand * second_operand;
   lastOperationDisplay.innerHTML = currentInput;
   currentOperationDisplay.innerHTML = result;
-  currentInput = result;
-
-  // let result = String(first_operand * second_operand);
-  // updateDisplay(result);
+  currentInput = result.toString();
+  console.log(currentInput);
 }
 
 function divideNumbers(first_operand, second_operand) {
   let result = first_operand / second_operand;
   lastOperationDisplay.innerHTML = currentInput;
   currentOperationDisplay.innerHTML = result;
-  currentInput = result;
-  // let result = String(first_operand / second_operand);
-  // updateDisplay(result);
+  currentInput = result.toString();
+  console.log(currentInput);
 }
 
-// console.log(addNumbers(5, 3));
-// console.log(subtractNumbers(5, 3));
-// console.log(multiplyNumbers(5, 3));
-// console.log(divideNumbers(9, 3));
-
-// class Calculator {
-//   constructor() {
-//     this.currentInput = "";
+// function updateDisplay(input) {
+//   if (currentOperationDisplay) {
+//     currentOperationDisplay.innerHTML = input;
 //   }
 
-//   // let currentInput = "";
-
-//   clearDisplay() {
-//     this.currentInput = "";
-//     this.updateDisplay();
-//   }
-
-//   appendNumber(number) {
-//     this.currentInput += number;
-//     this.updateDisplay();
-//   }
-
-//   appendOperator(operator) {
-//     this.currentInput += operator;
-//     this.updateDisplay();
-//   }
-
-//   calculateResult() {
-//     try {
-//       const result = this.evaluateExpression();
-//       this.currentInput = result.toString();
-//       this.updateDisplay();
-//     } catch {
-//       this.currentInput = "Error";
-//       this.updateDisplay();
-//     }
-//   }
-
-//   evaluateExpression() {
-//     const sanitizedInput = this.currentInput.replace(/[^-()\d/*+.]/g, "");
-//     return Function('"use strict";return (' + sanitizedInput + ")")();
-//   }
-
-//   updateDisplay() {
-//     const displayElement = document.getElementById("display");
-//     if (displayElement) {
-//       displayElement.value = this.currentInput;
+//   if (input.match(/[+\-*/]/)) {
+//     if (lastOperationDisplay) {
+//       lastOperationDisplay.innerHTML = input;
 //     }
 //   }
 // }
-
-// const calculator = new Calculator();
