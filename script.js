@@ -6,22 +6,45 @@ const lastOperationDisplay = document.getElementById("lastOperationDisplay");
 const operatorBtns = document.querySelectorAll(".operator");
 
 let operators = ["+", "-", "*", "/"];
-// let digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-let firstNumber;
-let operator;
-let secondNumber;
 let currentInput = "";
 let displayNumber = "";
-let currentOperator = "";
-
+let result;
 // equalsBtn.addEventListener("click", () => {
 //   parser(currentInput);
 // });
 
-const handleEquelsButtonClick = () => {
+const handleOperatorsClick = () => {
   parser(currentInput);
+
+  currentOperationDisplay.innerHTML = result;
+  currentInput = result.toString();
+  equalsBtn.removeEventListener("click", handleOperatorsClick);
 };
+
+const handleOperatorsClickTwo = () => {
+  let currentInputTwo = currentInput.slice(0, -1);
+  let searchOperator = currentInput[currentInput.length - 1];
+  console.log(searchOperator);
+  parser(currentInputTwo);
+
+  currentOperationDisplay.innerHTML = result;
+
+  currentInput = result.toString();
+  appendOperator(searchOperator);
+};
+
+// function deleteNumber() {
+//   console.log(currentInput);
+//   if (currentInput.length === 0) {
+//     return;
+//   }
+//   if (currentInput[currentInput.length - 1] !== currentInput.match(/[+\-*/]/)) {
+//     currentInput = currentInput.slice(0, -1);
+//   }
+//   console.log(currentInput);
+//   currentOperationDisplay.innerHTML = currentInput;
+// }
 
 function clearDisplay() {
   currentInput = "";
@@ -34,114 +57,125 @@ function appendNumber(number) {
   displayNumber += number;
   currentInput += number;
   currentOperationDisplay.innerHTML = displayNumber;
-  equalsBtn.addEventListener("click", handleEquelsButtonClick);
+
+  // if (currentInput.match(/[+\-*/]/)) {
+  //   operatorBtns.forEach((btn) => {
+  //     btn.addEventListener("click", handleOperatorsClick);
+  //   });
+  // }
+  if (currentInput.match(/(\d+)([+\-*/])(\d+)/)) {
+    equalsBtn.addEventListener("click", handleOperatorsClick);
+    operatorBtns.forEach((btn) => {
+      btn.addEventListener("click", handleOperatorsClickTwo);
+    });
+  }
+
+  // operatorBtns.forEach((btn) => {
+  //   btn.removeEventListener("click", handleOperatorsClick);
+  // });
 }
+const appendOperator = (operator) => {
+  if (currentInput.length === 0) {
+    return;
+  }
 
-function appendOperator(operator) {
-  console.log(currentInput);
-  let operatorCount = currentInput
-    .split("")
-    .filter((char) => operators.includes(char)).length;
-
-  if (operatorCount === 1 && operators.includes(currentInput.slice(-1))) {
+  if (operators.includes(currentInput.slice(-1))) {
     currentInput = currentInput.slice(0, -1) + operator;
   } else {
     currentInput += operator;
   }
+
+  // if (currentInput.match(/(\d+)([+\-*/])(\d+)/)) {
+  //   operatorBtns.forEach((btn) => {
+  //     btn.addEventListener("click", handleOperatorsClick);
+  //   });
+  // }
   console.log(currentInput);
   lastOperationDisplay.innerHTML = currentInput;
-
-  // if (currentOperator.length === 0) {
-  //   currentOperator += operator;
-  //   currentInput += currentOperator;
-  // }
-  // if (currentOperator.length >= 1) {
-  //   currentOperator = operator;
-  // currentOperator = currentOperator.slice(0, -1);
-  // console.log(currentOperator);
-  // currentInput = currentInput.slice(0, -1) + currentOperator;
-  // }
-
-  // console.log(currentInput);
-  // operators.forEach((op) => {
-  //   if (currentInput.includes(op)) {
-  //     lastOperationDisplay.innerHTML = currentInput;
-  //   }
-  // if (!currentInput.includes(op)) {
-  //   currentInput += currentOperator;
-  //   lastOperationDisplay.innerHTML = currentInput;
-  // }
-  // });
-  // console.log(currentInput);
-  // currentInput += currentOperator;
-  // lastOperationDisplay.innerHTML = currentInput;
-  // currentInput += operator;
-  currentOperator = "";
   displayNumber = "";
-  equalsBtn.removeEventListener("click", handleEquelsButtonClick);
-}
+  equalsBtn.removeEventListener("click", handleOperatorsClick);
+};
 
 function parser(expression) {
-  let first_operand;
+  let firstOperand;
   let operator;
-  let second_operand;
+  let secondOperand;
   let index;
 
   operators.forEach((op) => {
     if (expression.includes(op)) {
       index = expression.indexOf(op);
-      first_operand = Number(expression.slice(0, index));
+      firstOperand = Number(expression.slice(0, index));
       operator = expression[index];
-      second_operand = Number(expression.slice(index + 1, expression.length));
+      secondOperand = Number(expression.slice(index + 1, expression.length));
     }
   });
 
-  // if (second_operand === undefined) return;
-
-  console.log(first_operand, operator, second_operand);
-  operate(first_operand, operator, second_operand);
+  lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
+  console.log(firstOperand, operator, secondOperand);
+  operate(firstOperand, operator, secondOperand);
 }
 
-function operate(first_operand, operator, second_operand) {
-  firstNumber = first_operand;
-  secondNumber = second_operand;
-  if (operator === "+") addNumbers(first_operand, second_operand);
-  if (operator === "-") subtractNumbers(first_operand, second_operand);
-  if (operator === "*") multiplyNumbers(first_operand, second_operand);
-  if (operator === "/") divideNumbers(first_operand, second_operand);
+function operate(firstOperand, operator, secondOperand) {
+  if (operator == "+") result = firstOperand + secondOperand;
+  if (operator == "-") result = firstOperand - secondOperand;
+  if (operator == "*") result = firstOperand * secondOperand;
+  if (operator == "/") result = firstOperand / secondOperand;
+
+  operatorBtns.forEach((btn) => {
+    btn.removeEventListener("click", handleOperatorsClickTwo);
+  });
 }
 
-function addNumbers(first_operand, second_operand) {
-  let result = first_operand + second_operand;
-  lastOperationDisplay.innerHTML = currentInput + "=";
-  currentOperationDisplay.innerHTML = result;
-  currentInput = result.toString();
-  console.log(currentInput);
-}
+// if (operator === "+") addNumbers(first_operand, second_operand);
+// if (operator === "-") subtractNumbers(first_operand, second_operand);
+// if (operator === "*") multiplyNumbers(first_operand, second_operand);
+// if (operator === "/") divideNumbers(first_operand, second_operand);
 
-function subtractNumbers(first_operand, second_operand) {
-  let result = first_operand - second_operand;
-  lastOperationDisplay.innerHTML = currentInput + "=";
-  currentOperationDisplay.innerHTML = result;
-  currentInput = result.toString();
-  console.log(currentInput);
-}
+// function addNumbers(first_operand, second_operand) {
+//   let result = first_operand + second_operand;
+//   lastOperationDisplay.innerHTML = currentInput + "=";
+//   currentOperationDisplay.innerHTML = result;
+//   currentInput = result.toString();
+//   console.log(currentInput);
+//   // operatorBtns.forEach((btn) => {
+//   //   btn.removeEventListener("click", handleOperatorsClick);
+//   // });
+// }
 
-function multiplyNumbers(first_operand, second_operand) {
-  let result = first_operand * second_operand;
-  lastOperationDisplay.innerHTML = currentInput + "=";
-  currentOperationDisplay.innerHTML = result;
-  currentInput = result.toString();
-  console.log(currentInput);
-}
+// function subtractNumbers(first_operand, second_operand) {
+//   let result = first_operand - second_operand;
+//   lastOperationDisplay.innerHTML = currentInput + "=";
+//   currentOperationDisplay.innerHTML = result;
+//   currentInput = result.toString();
+//   console.log(currentInput);
+//   // operatorBtns.forEach((btn) => {
+//   //   btn.removeEventListener("click", handleOperatorsClick);
+//   // });
+// }
 
-function divideNumbers(first_operand, second_operand) {
-  let result = first_operand / second_operand;
-  lastOperationDisplay.innerHTML = currentInput + "=";
-  currentOperationDisplay.innerHTML = result;
-  currentInput = result.toString();
-  console.log(currentInput);
-}
+// function multiplyNumbers(first_operand, second_operand) {
+//   let result = first_operand * second_operand;
+//   lastOperationDisplay.innerHTML = currentInput + "=";
+//   currentOperationDisplay.innerHTML = result;
+
+//   currentInput = result.toString();
+//   console.log(currentInput);
+//   // operatorBtns.forEach((btn) => {
+//   //   btn.removeEventListener("click", handleOperatorsClick);
+//   // });
+// }
+
+// function divideNumbers(first_operand, second_operand) {
+//   let result = first_operand / second_operand;
+//   lastOperationDisplay.innerHTML = currentInput + "=";
+//   currentOperationDisplay.innerHTML = result;
+//   currentInput = result.toString();
+//   console.log(currentInput);
+//   // operatorBtns.forEach((btn) => {
+//   //   btn.removeEventListener("click", handleOperatorsClick);
+//   // });
+// }
 
 // function updateDisplay(input) {
 //   if (currentOperationDisplay) {
