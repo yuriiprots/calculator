@@ -120,11 +120,13 @@ const appendOperator = (operator) => {
 
   if (operators.includes(currentInput.slice(-1))) {
     currentInput = currentInput.slice(0, -1) + operator;
+    lastOperationDisplay.innerHTML = `${currentInput.slice(0, -1)} ${operator}`;
   } else {
     currentInput += operator;
+    lastOperationDisplay.innerHTML = `${currentInput.slice(0, -1)} ${operator}`;
   }
   console.log(currentInput);
-  lastOperationDisplay.innerHTML = currentInput;
+  // lastOperationDisplay.innerHTML = currentInput;
   displayNumber = "";
   equalsBtn.removeEventListener("click", handleOperatorsClick);
 };
