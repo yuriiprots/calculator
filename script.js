@@ -8,7 +8,7 @@ const operatorBtns = document.querySelectorAll(".operator");
 let operators = ["+", "-", "*", "/"];
 
 let currentInput = "";
-let displayNumber = "";
+let displayNumber = "0";
 let result;
 // equalsBtn.addEventListener("click", () => {
 //   parser(currentInput);
@@ -27,11 +27,13 @@ const handleOperatorsClickTwo = () => {
   let currentInputTwo = currentInput.slice(0, -1);
   let searchOperator = currentInput[currentInput.length - 1];
   console.log(searchOperator);
+
   parser(currentInputTwo);
 
   currentOperationDisplay.innerHTML = result;
-
   currentInput = result.toString();
+  displayNumber = result.toString();
+
   appendOperator(searchOperator);
 };
 
@@ -47,7 +49,7 @@ function deleteNumber() {
   console.log(currentInput);
   console.log(displayNumber);
   currentOperationDisplay.innerHTML = displayNumber;
-  if (!currentInput.match(/(\d+)([+\-*/])(\d+)/)) {
+  if (!currentInput.match(/(\d+(\.\d*)?)([+\-*/])(\d+(\.\d*)?)/)) {
     equalsBtn.removeEventListener("click", handleOperatorsClick);
     operatorBtns.forEach((btn) => {
       btn.removeEventListener("click", handleOperatorsClickTwo);
@@ -57,32 +59,83 @@ function deleteNumber() {
 
 function clearDisplay() {
   currentInput = "";
-  currentOperationDisplay.innerHTML = "";
+  displayNumber = "0";
+  currentOperationDisplay.innerHTML = displayNumber;
   lastOperationDisplay.innerHTML = "";
-  displayNumber = "";
 }
 
 function appendNumber(number) {
+  console.log(number);
+  console.log(displayNumber);
+
+  if (displayNumber === "0" && currentInput.length === 0) {
+    displayNumber = "";
+  }
+
+  if (
+    currentInput[0] === "0" &&
+    number === "0" &&
+    !displayNumber.includes(".") &&
+    !currentInput.includes(".")
+  ) {
+    return;
+  }
+
+  if (displayNumber === "" && number === ".") {
+    displayNumber = "0";
+  }
+
+  if (number === "." && displayNumber.includes(".")) {
+    return;
+  }
+
+  // if (displayNumber === "0.") {
+  // currentInput += "0";
+  // }
+
+  console.log(number);
   displayNumber += number;
+  console.log(displayNumber);
+
   currentInput += number;
+  console.log(currentInput);
   currentOperationDisplay.innerHTML = displayNumber;
 
-  // if (currentInput.match(/[+\-*/]/)) {
-  //   operatorBtns.forEach((btn) => {
-  //     btn.addEventListener("click", handleOperatorsClick);
-  //   });
+  // if (number === "." && displayNumber.includes(".")) {
+  //   return;
   // }
-  if (currentInput.match(/(\d+)([+\-*/])(\d+)/)) {
+
+  if (currentInput.match(/(\d+(\.\d*)?)([+\-*/])(\d+(\.\d*)?)/)) {
     equalsBtn.addEventListener("click", handleOperatorsClick);
     operatorBtns.forEach((btn) => {
       btn.addEventListener("click", handleOperatorsClickTwo);
     });
   }
-
-  // operatorBtns.forEach((btn) => {
-  //   btn.removeEventListener("click", handleOperatorsClick);
-  // });
 }
+
+// if (number === "." && displayNumber === "") {
+//   displayNumber = "0";
+// }
+
+// if (number === "0" && displayNumber === "0") {
+//   return;
+// }
+
+// if (number === "0" && displayNumber === "") {
+//   displayNumber = "0";
+//   return;
+// }
+
+// if (number === "0" && !displayNumber.includes(".")) {
+//   displayNumber += number;
+//   return;
+// }
+
+// if (number === "0" && displayNumber.includes(".")) {
+//   displayNumber += number;
+//   return;
+// }
+
 const appendOperator = (operator) => {
   if (currentInput.length === 0) {
     return;
@@ -93,12 +146,6 @@ const appendOperator = (operator) => {
   } else {
     currentInput += operator;
   }
-
-  // if (currentInput.match(/(\d+)([+\-*/])(\d+)/)) {
-  //   operatorBtns.forEach((btn) => {
-  //     btn.addEventListener("click", handleOperatorsClick);
-  //   });
-  // }
   console.log(currentInput);
   lastOperationDisplay.innerHTML = currentInput;
   displayNumber = "";
@@ -114,9 +161,27 @@ function parser(expression) {
   operators.forEach((op) => {
     if (expression.includes(op)) {
       index = expression.indexOf(op);
-      firstOperand = Number(expression.slice(0, index));
+      // firstOperand = Number(expression.slice(0, index));
+      firstOperand = expression.slice(0, index);
       operator = expression[index];
-      secondOperand = Number(expression.slice(index + 1, expression.length));
+      // secondOperand = Number(expression.slice(index + 1, expression.length));
+      secondOperand = expression.slice(index + 1, expression.length);
+      // if (
+      //   firstOperand === "-" ||
+      //   (firstOperand[0] === "-" && firstOperand.length > 1)
+      // ) {
+      //   firstOperand = -Number(firstOperand.replace(/^-/, ""));
+      // } else {
+      //   firstOperand = Number(firstOperand);
+      // }
+      // if (
+      //   secondOperand === "-" ||
+      //   (secondOperand[0] === "-" && secondOperand.length > 1)
+      // ) {
+      //   secondOperand = -Number(secondOperand.replace(/^-/, ""));
+      // } else {
+      //   secondOperand = Number(secondOperand);
+      // }
     }
   });
 
@@ -126,6 +191,8 @@ function parser(expression) {
 }
 
 function operate(firstOperand, operator, secondOperand) {
+  firstOperand = Number(firstOperand);
+  secondOperand = Number(secondOperand);
   if (operator == "+") result = firstOperand + secondOperand;
   if (operator == "-") result = firstOperand - secondOperand;
   if (operator == "*") result = firstOperand * secondOperand;
@@ -135,65 +202,3 @@ function operate(firstOperand, operator, secondOperand) {
     btn.removeEventListener("click", handleOperatorsClickTwo);
   });
 }
-
-// if (operator === "+") addNumbers(first_operand, second_operand);
-// if (operator === "-") subtractNumbers(first_operand, second_operand);
-// if (operator === "*") multiplyNumbers(first_operand, second_operand);
-// if (operator === "/") divideNumbers(first_operand, second_operand);
-
-// function addNumbers(first_operand, second_operand) {
-//   let result = first_operand + second_operand;
-//   lastOperationDisplay.innerHTML = currentInput + "=";
-//   currentOperationDisplay.innerHTML = result;
-//   currentInput = result.toString();
-//   console.log(currentInput);
-//   // operatorBtns.forEach((btn) => {
-//   //   btn.removeEventListener("click", handleOperatorsClick);
-//   // });
-// }
-
-// function subtractNumbers(first_operand, second_operand) {
-//   let result = first_operand - second_operand;
-//   lastOperationDisplay.innerHTML = currentInput + "=";
-//   currentOperationDisplay.innerHTML = result;
-//   currentInput = result.toString();
-//   console.log(currentInput);
-//   // operatorBtns.forEach((btn) => {
-//   //   btn.removeEventListener("click", handleOperatorsClick);
-//   // });
-// }
-
-// function multiplyNumbers(first_operand, second_operand) {
-//   let result = first_operand * second_operand;
-//   lastOperationDisplay.innerHTML = currentInput + "=";
-//   currentOperationDisplay.innerHTML = result;
-
-//   currentInput = result.toString();
-//   console.log(currentInput);
-//   // operatorBtns.forEach((btn) => {
-//   //   btn.removeEventListener("click", handleOperatorsClick);
-//   // });
-// }
-
-// function divideNumbers(first_operand, second_operand) {
-//   let result = first_operand / second_operand;
-//   lastOperationDisplay.innerHTML = currentInput + "=";
-//   currentOperationDisplay.innerHTML = result;
-//   currentInput = result.toString();
-//   console.log(currentInput);
-//   // operatorBtns.forEach((btn) => {
-//   //   btn.removeEventListener("click", handleOperatorsClick);
-//   // });
-// }
-
-// function updateDisplay(input) {
-//   if (currentOperationDisplay) {
-//     currentOperationDisplay.innerHTML = input;
-//   }
-
-//   if (input.match(/[+\-*/]/)) {
-//     if (lastOperationDisplay) {
-//       lastOperationDisplay.innerHTML = input;
-//     }
-//   }
-// }
