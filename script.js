@@ -113,32 +113,9 @@ function appendNumber(number) {
   }
 }
 
-// if (number === "." && displayNumber === "") {
-//   displayNumber = "0";
-// }
-
-// if (number === "0" && displayNumber === "0") {
-//   return;
-// }
-
-// if (number === "0" && displayNumber === "") {
-//   displayNumber = "0";
-//   return;
-// }
-
-// if (number === "0" && !displayNumber.includes(".")) {
-//   displayNumber += number;
-//   return;
-// }
-
-// if (number === "0" && displayNumber.includes(".")) {
-//   displayNumber += number;
-//   return;
-// }
-
 const appendOperator = (operator) => {
   if (currentInput.length === 0) {
-    return;
+    currentInput = "0";
   }
 
   if (operators.includes(currentInput.slice(-1))) {
@@ -157,33 +134,33 @@ function parser(expression) {
   let operator;
   let secondOperand;
   let index;
+  let sign;
+
+  if (expression[0] === "-") {
+    expression = expression.slice(1);
+    sign = "-";
+  }
+
+  console.log(expression);
 
   operators.forEach((op) => {
     if (expression.includes(op)) {
       index = expression.indexOf(op);
       // firstOperand = Number(expression.slice(0, index));
+
       firstOperand = expression.slice(0, index);
+      console.log(firstOperand);
       operator = expression[index];
+      console.log(operator);
       // secondOperand = Number(expression.slice(index + 1, expression.length));
       secondOperand = expression.slice(index + 1, expression.length);
-      // if (
-      //   firstOperand === "-" ||
-      //   (firstOperand[0] === "-" && firstOperand.length > 1)
-      // ) {
-      //   firstOperand = -Number(firstOperand.replace(/^-/, ""));
-      // } else {
-      //   firstOperand = Number(firstOperand);
-      // }
-      // if (
-      //   secondOperand === "-" ||
-      //   (secondOperand[0] === "-" && secondOperand.length > 1)
-      // ) {
-      //   secondOperand = -Number(secondOperand.replace(/^-/, ""));
-      // } else {
-      //   secondOperand = Number(secondOperand);
-      // }
+      console.log(secondOperand);
     }
   });
+
+  if (sign) {
+    firstOperand = sign + firstOperand;
+  }
 
   lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
   console.log(firstOperand, operator, secondOperand);
@@ -192,12 +169,17 @@ function parser(expression) {
 
 function operate(firstOperand, operator, secondOperand) {
   firstOperand = Number(firstOperand);
+  console.log(firstOperand);
   secondOperand = Number(secondOperand);
+  console.log(secondOperand);
   if (operator == "+") result = firstOperand + secondOperand;
   if (operator == "-") result = firstOperand - secondOperand;
   if (operator == "*") result = firstOperand * secondOperand;
   if (operator == "/") result = firstOperand / secondOperand;
 
+  console.log(result);
+  result = parseFloat(result.toFixed(3));
+  console.log(result);
   operatorBtns.forEach((btn) => {
     btn.removeEventListener("click", handleOperatorsClickTwo);
   });
