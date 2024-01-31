@@ -20,6 +20,7 @@ const handleOperatorsClick = () => {
   currentOperationDisplay.innerHTML = result;
   currentInput = result.toString();
   equalsBtn.removeEventListener("click", handleOperatorsClick);
+  displayNumber = result.toString();
 };
 
 const handleOperatorsClickTwo = () => {
@@ -34,17 +35,25 @@ const handleOperatorsClickTwo = () => {
   appendOperator(searchOperator);
 };
 
-// function deleteNumber() {
-//   console.log(currentInput);
-//   if (currentInput.length === 0) {
-//     return;
-//   }
-//   if (currentInput[currentInput.length - 1] !== currentInput.match(/[+\-*/]/)) {
-//     currentInput = currentInput.slice(0, -1);
-//   }
-//   console.log(currentInput);
-//   currentOperationDisplay.innerHTML = currentInput;
-// }
+function deleteNumber() {
+  console.log(displayNumber);
+  if (displayNumber.length === 0) {
+    return;
+  }
+  if (currentInput[currentInput.length - 1] !== currentInput.match(/[+\-*/]/)) {
+    currentInput = currentInput.slice(0, -1);
+    displayNumber = displayNumber.slice(0, -1);
+  }
+  console.log(currentInput);
+  console.log(displayNumber);
+  currentOperationDisplay.innerHTML = displayNumber;
+  if (!currentInput.match(/(\d+)([+\-*/])(\d+)/)) {
+    equalsBtn.removeEventListener("click", handleOperatorsClick);
+    operatorBtns.forEach((btn) => {
+      btn.removeEventListener("click", handleOperatorsClickTwo);
+    });
+  }
+}
 
 function clearDisplay() {
   currentInput = "";
