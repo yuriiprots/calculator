@@ -9,32 +9,73 @@ let operators = ["+", "-", "*", "/"];
 
 let currentInput = "";
 let displayNumber = "0";
+let firstOperand;
+let operator;
+let secondOperand;
 let result;
-// equalsBtn.addEventListener("click", () => {
-//   parser(currentInput);
-// });
 
 const handleOperatorsClick = () => {
   parser(currentInput);
 
-  currentOperationDisplay.innerHTML = result;
-  currentInput = result.toString();
-  equalsBtn.removeEventListener("click", handleOperatorsClick);
-  displayNumber = result.toString();
+  console.log(result);
+  console.log(operator);
+  console.log(secondOperand);
+  if (
+    operator === "/" &&
+    secondOperand === "0" &&
+    (result === Infinity || result === -Infinity || result === NaN)
+  ) {
+    result = 0;
+    console.log(currentInput);
+    console.log(result);
+    currentOperationDisplay.innerHTML = displayNumber;
+  }
+  if (
+    (operator !== "/" && secondOperand !== "0") ||
+    (operator === "/" && secondOperand !== "0")
+  ) {
+    console.log(result);
+    currentOperationDisplay.innerHTML = result;
+    console.log(currentInput);
+    currentInput = result.toString();
+    console.log(currentInput);
+    equalsBtn.removeEventListener("click", handleOperatorsClick);
+    displayNumber = result.toString();
+  }
 };
 
 const handleOperatorsClickTwo = () => {
   let currentInputTwo = currentInput.slice(0, -1);
+  console.log(currentInputTwo);
   let searchOperator = currentInput[currentInput.length - 1];
   console.log(searchOperator);
 
+  console.log(result);
+
   parser(currentInputTwo);
 
-  currentOperationDisplay.innerHTML = result;
-  currentInput = result.toString();
-  displayNumber = result.toString();
-
-  appendOperator(searchOperator);
+  if (
+    result === Infinity ||
+    result === -Infinity ||
+    result === NaN ||
+    result === 0
+  ) {
+    currentInput = "0";
+    appendOperator(searchOperator);
+    console.log(currentInput);
+    console.log(displayNumber);
+    currentOperationDisplay.innerHTML = 0;
+  }
+  if (
+    (operator !== "/" && secondOperand !== "0") ||
+    (operator === "/" && secondOperand !== "0")
+  ) {
+    currentOperationDisplay.innerHTML = result;
+    console.log(currentInput);
+    currentInput = result.toString();
+    displayNumber = result.toString();
+    appendOperator(searchOperator);
+  }
 };
 
 function deleteNumber() {
@@ -46,10 +87,12 @@ function deleteNumber() {
     currentInput = currentInput.slice(0, -1);
     displayNumber = displayNumber.slice(0, -1);
   }
+
   console.log(currentInput);
   console.log(displayNumber);
   currentOperationDisplay.innerHTML = displayNumber;
-  if (!currentInput.match(/(\d+(\.\d*)?)([+\-*/])(\d+(\.\d*)?)/)) {
+
+  if (!currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/)) {
     equalsBtn.removeEventListener("click", handleOperatorsClick);
     operatorBtns.forEach((btn) => {
       btn.removeEventListener("click", handleOperatorsClickTwo);
@@ -62,11 +105,21 @@ function clearDisplay() {
   displayNumber = "0";
   currentOperationDisplay.innerHTML = displayNumber;
   lastOperationDisplay.innerHTML = "";
+  firstOperand = NaN;
+  operator = NaN;
+  secondOperand = NaN;
 }
 
 function appendNumber(number) {
   console.log(number);
   console.log(displayNumber);
+  console.log(currentInput);
+
+  if (displayNumber === "0" && operator === "/" && secondOperand === "0") {
+    currentInput = currentInput.slice(0, -1);
+    console.log(currentInput);
+    displayNumber = "";
+  }
 
   if (displayNumber === "0" && currentInput.length === 0) {
     displayNumber = "";
@@ -76,7 +129,8 @@ function appendNumber(number) {
     currentInput[0] === "0" &&
     number === "0" &&
     !displayNumber.includes(".") &&
-    !currentInput.includes(".")
+    !currentInput.includes(".") &&
+    currentInput.includes(operator)
   ) {
     return;
   }
@@ -89,10 +143,6 @@ function appendNumber(number) {
     return;
   }
 
-  // if (displayNumber === "0.") {
-  // currentInput += "0";
-  // }
-
   console.log(number);
   displayNumber += number;
   console.log(displayNumber);
@@ -101,11 +151,8 @@ function appendNumber(number) {
   console.log(currentInput);
   currentOperationDisplay.innerHTML = displayNumber;
 
-  // if (number === "." && displayNumber.includes(".")) {
-  //   return;
-  // }
 
-  if (currentInput.match(/(\d+(\.\d*)?)([+\-*/])(\d+(\.\d*)?)/)) {
+  if (currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/)) {
     equalsBtn.addEventListener("click", handleOperatorsClick);
     operatorBtns.forEach((btn) => {
       btn.addEventListener("click", handleOperatorsClickTwo);
@@ -114,9 +161,26 @@ function appendNumber(number) {
 }
 
 const appendOperator = (operator) => {
+  console.log(currentInput);
   if (currentInput.length === 0) {
     currentInput = "0";
   }
+
+  console.log(result);
+
+  if (
+    (currentInput.slice(-1) === "0" && currentInput.slice(-2, -1) === "/") ||
+    result === Infinity ||
+    result === -Infinity ||
+    result === NaN ||
+    result === 0
+  ) {
+    currentInput = "0";
+    displayNumber = "";
+  }
+
+  console.log(currentInput);
+
 
   if (operators.includes(currentInput.slice(-1))) {
     currentInput = currentInput.slice(0, -1) + operator;
@@ -132,9 +196,6 @@ const appendOperator = (operator) => {
 };
 
 function parser(expression) {
-  let firstOperand;
-  let operator;
-  let secondOperand;
   let index;
   let sign;
 
@@ -148,13 +209,10 @@ function parser(expression) {
   operators.forEach((op) => {
     if (expression.includes(op)) {
       index = expression.indexOf(op);
-      // firstOperand = Number(expression.slice(0, index));
-
       firstOperand = expression.slice(0, index);
       console.log(firstOperand);
       operator = expression[index];
       console.log(operator);
-      // secondOperand = Number(expression.slice(index + 1, expression.length));
       secondOperand = expression.slice(index + 1, expression.length);
       console.log(secondOperand);
     }
@@ -164,8 +222,13 @@ function parser(expression) {
     firstOperand = sign + firstOperand;
   }
 
-  lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
-  console.log(firstOperand, operator, secondOperand);
+  if (operator == "/" && secondOperand === "0") {
+    alert("Cannot divide by zero!");
+  } else {
+    console.log(firstOperand, operator, secondOperand);
+    lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
+  }
+  //console.log(firstOperand, operator, secondOperand);
   operate(firstOperand, operator, secondOperand);
 }
 
@@ -174,6 +237,7 @@ function operate(firstOperand, operator, secondOperand) {
   console.log(firstOperand);
   secondOperand = Number(secondOperand);
   console.log(secondOperand);
+
   if (operator == "+") result = firstOperand + secondOperand;
   if (operator == "-") result = firstOperand - secondOperand;
   if (operator == "*") result = firstOperand * secondOperand;
