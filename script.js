@@ -1,3 +1,5 @@
+// VARIABLES
+
 const equalsBtn = document.getElementById("equalsBtn");
 const currentOperationDisplay = document.getElementById(
   "currentOperationDisplay"
@@ -6,7 +8,6 @@ const lastOperationDisplay = document.getElementById("lastOperationDisplay");
 const operatorBtns = document.querySelectorAll(".operator");
 
 let operators = ["+", "-", "*", "/"];
-
 let currentInput = "";
 let displayNumber = "0";
 let firstOperand;
@@ -14,43 +15,77 @@ let operator;
 let secondOperand;
 let result;
 
-const handleOperatorsClick = () => {
+// UPDATE DISPLAY FUNCTION
+const updateCurrentOperationDisplay = (value) => {
+  currentOperationDisplay.innerHTML = value;
+};
+
+const updatelastOperationDisplayFirst = (
+  firstOperand,
+  operator,
+  secondOperand
+) => {
+  lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
+};
+
+const updatelastOperationDisplaySecond = (valueOne, valueTwo) => {
+  lastOperationDisplay.innerHTML = `${valueOne} ${valueTwo}`;
+};
+
+const updatelastOperationDisplayThird = (value) => {
+  lastOperationDisplay.innerHTML = value;
+};
+
+// ADD EVENT LISTENERS
+
+function addEventListenersForAllOperators() {
+  equalsBtn.addEventListener("click", handleEqualsBtnClick);
+  operatorBtns.forEach((btn) => {
+    btn.addEventListener("click", handleOperatorsClick);
+  });
+}
+
+// REMOVE EVENT LISTENERS
+
+function removeEventListenerForEqualsBtn() {
+  equalsBtn.removeEventListener("click", handleEqualsBtnClick);
+}
+
+function removeEventListenersForSomeOperators() {
+  operatorBtns.forEach((btn) => {
+    btn.removeEventListener("click", handleOperatorsClick);
+  });
+}
+
+
+// HANDLE EQUALS OPERATOR CLICK
+const handleEqualsBtnClick = () => {
   parser(currentInput);
 
-  console.log(result);
-  console.log(operator);
-  console.log(secondOperand);
   if (
     operator === "/" &&
     secondOperand === "0" &&
     (result === Infinity || result === -Infinity || result === NaN)
   ) {
     result = 0;
-    console.log(currentInput);
-    console.log(result);
-    currentOperationDisplay.innerHTML = displayNumber;
+    updateCurrentOperationDisplay(displayNumber);
   }
   if (
     (operator !== "/" && secondOperand !== "0") ||
     (operator === "/" && secondOperand !== "0")
   ) {
-    console.log(result);
-    currentOperationDisplay.innerHTML = result;
-    console.log(currentInput);
+    updateCurrentOperationDisplay(result);
     currentInput = result.toString();
-    console.log(currentInput);
-    equalsBtn.removeEventListener("click", handleOperatorsClick);
+    removeEventListenerForEqualsBtn();
     displayNumber = result.toString();
   }
 };
 
-const handleOperatorsClickTwo = () => {
-  let currentInputTwo = currentInput.slice(0, -1);
-  console.log(currentInputTwo);
-  let searchOperator = currentInput[currentInput.length - 1];
-  console.log(searchOperator);
 
-  console.log(result);
+// HANDLE OPERATORS CLICK
+const handleOperatorsClick = () => {
+  let currentInputTwo = currentInput.slice(0, -1);
+  let searchOperator = currentInput[currentInput.length - 1];
 
   parser(currentInputTwo);
 
@@ -62,24 +97,23 @@ const handleOperatorsClickTwo = () => {
   ) {
     currentInput = "0";
     appendOperator(searchOperator);
-    console.log(currentInput);
-    console.log(displayNumber);
-    currentOperationDisplay.innerHTML = 0;
+
+    updateCurrentOperationDisplay(0);
   }
   if (
     (operator !== "/" && secondOperand !== "0") ||
     (operator === "/" && secondOperand !== "0")
   ) {
-    currentOperationDisplay.innerHTML = result;
-    console.log(currentInput);
+    updateCurrentOperationDisplay(result);
     currentInput = result.toString();
     displayNumber = result.toString();
     appendOperator(searchOperator);
   }
 };
 
+// DELETE NUMBER FUNCTION
+
 function deleteNumber() {
-  console.log(displayNumber);
   if (displayNumber.length === 0) {
     return;
   }
@@ -88,36 +122,28 @@ function deleteNumber() {
     displayNumber = displayNumber.slice(0, -1);
   }
 
-  console.log(currentInput);
-  console.log(displayNumber);
-  currentOperationDisplay.innerHTML = displayNumber;
+  updateCurrentOperationDisplay(displayNumber);
 
   if (!currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/)) {
-    equalsBtn.removeEventListener("click", handleOperatorsClick);
-    operatorBtns.forEach((btn) => {
-      btn.removeEventListener("click", handleOperatorsClickTwo);
-    });
+    removeEventListenerForEqualsBtn();
+    removeEventListenersForSomeOperators();
   }
 }
 
+// CLEAR DISPLAY FUNCTION
 function clearDisplay() {
   currentInput = "";
   displayNumber = "0";
-  currentOperationDisplay.innerHTML = displayNumber;
-  lastOperationDisplay.innerHTML = "";
-  firstOperand = NaN;
-  operator = NaN;
-  secondOperand = NaN;
+
+  updateCurrentOperationDisplay(displayNumber);
+  updatelastOperationDisplayThird("");
 }
 
-function appendNumber(number) {
-  console.log(number);
-  console.log(displayNumber);
-  console.log(currentInput);
+// APPEND NUMBER FUNCTION
 
+function appendNumber(number) {
   if (displayNumber === "0" && operator === "/" && secondOperand === "0") {
     currentInput = currentInput.slice(0, -1);
-    console.log(currentInput);
     displayNumber = "";
   }
 
@@ -143,58 +169,45 @@ function appendNumber(number) {
     return;
   }
 
-  console.log(number);
   displayNumber += number;
-  console.log(displayNumber);
-
   currentInput += number;
-  console.log(currentInput);
-  currentOperationDisplay.innerHTML = displayNumber;
 
+  updateCurrentOperationDisplay(displayNumber);
 
-  if (currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/)) {
-    equalsBtn.addEventListener("click", handleOperatorsClick);
-    operatorBtns.forEach((btn) => {
-      btn.addEventListener("click", handleOperatorsClickTwo);
-    });
-  }
+  if (currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/))
+    addEventListenersForAllOperators();
 }
 
-const appendOperator = (operator) => {
-  console.log(currentInput);
+// APPEND OPERATOR FUNCTION
+function appendOperator(operator) {
+  displayNumber = "";
+
   if (currentInput.length === 0) {
     currentInput = "0";
   }
 
-  console.log(result);
-
   if (
     (currentInput.slice(-1) === "0" && currentInput.slice(-2, -1) === "/") ||
+    (currentInput.slice(0, 1) === "0" && currentInput.slice(-1) === "0") ||
     result === Infinity ||
     result === -Infinity ||
-    result === NaN ||
-    result === 0
+    result === NaN
   ) {
     currentInput = "0";
     displayNumber = "";
   }
 
-  console.log(currentInput);
-
-
   if (operators.includes(currentInput.slice(-1))) {
     currentInput = currentInput.slice(0, -1) + operator;
-    lastOperationDisplay.innerHTML = `${currentInput.slice(0, -1)} ${operator}`;
   } else {
     currentInput += operator;
-    lastOperationDisplay.innerHTML = `${currentInput.slice(0, -1)} ${operator}`;
   }
-  console.log(currentInput);
-  // lastOperationDisplay.innerHTML = currentInput;
-  displayNumber = "";
-  equalsBtn.removeEventListener("click", handleOperatorsClick);
-};
 
+  updatelastOperationDisplaySecond(currentInput.slice(0, -1), operator);
+  removeEventListenerForEqualsBtn();
+}
+
+// PARSER FUNCTION
 function parser(expression) {
   let index;
   let sign;
@@ -204,17 +217,12 @@ function parser(expression) {
     sign = "-";
   }
 
-  console.log(expression);
-
   operators.forEach((op) => {
     if (expression.includes(op)) {
       index = expression.indexOf(op);
       firstOperand = expression.slice(0, index);
-      console.log(firstOperand);
       operator = expression[index];
-      console.log(operator);
       secondOperand = expression.slice(index + 1, expression.length);
-      console.log(secondOperand);
     }
   });
 
@@ -225,28 +233,23 @@ function parser(expression) {
   if (operator == "/" && secondOperand === "0") {
     alert("Cannot divide by zero!");
   } else {
-    console.log(firstOperand, operator, secondOperand);
-    lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
+    updatelastOperationDisplayFirst(firstOperand, operator, secondOperand);
   }
-  //console.log(firstOperand, operator, secondOperand);
+
   operate(firstOperand, operator, secondOperand);
 }
 
+// OPERATE FUNCTION
 function operate(firstOperand, operator, secondOperand) {
   firstOperand = Number(firstOperand);
-  console.log(firstOperand);
   secondOperand = Number(secondOperand);
-  console.log(secondOperand);
 
   if (operator == "+") result = firstOperand + secondOperand;
   if (operator == "-") result = firstOperand - secondOperand;
   if (operator == "*") result = firstOperand * secondOperand;
   if (operator == "/") result = firstOperand / secondOperand;
 
-  console.log(result);
   result = parseFloat(result.toFixed(3));
-  console.log(result);
-  operatorBtns.forEach((btn) => {
-    btn.removeEventListener("click", handleOperatorsClickTwo);
-  });
+
+  removeEventListenersForSomeOperators();
 }
