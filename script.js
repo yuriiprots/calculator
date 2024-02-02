@@ -1,255 +1,294 @@
+let firstOperand = "";
+let curentOperator = null;
+let secondOperand = "";
+
+console.log(curentOperator);
+console.log(typeof curentOperator);
+
+function add(a, b) {
+  return a + b;
+}
+
+function subtract(a, b) {
+  return a - b;
+}
+
+function multiply(a, b) {
+  return a * b;
+}
+
+function divide(a, b) {
+  return a / b;
+}
+
+function operate(operator, a, b) {
+  a = Number(a);
+  b = Number(b);
+
+  switch (operator) {
+    case "+":
+      return add(a, b);
+    case "-":
+      return subtract(a, b);
+    case "*":
+      return multiply(a, b);
+    case "/":
+      if (b === 0) return null;
+      else return divide(a, b);
+    default:
+      return null;
+  }
+}
+
 // VARIABLES
+// const equalsBtn = document.getElementById("equalsBtn");
+// const currentOperationDisplay = document.getElementById(
+//   "currentOperationDisplay"
+// );
+// const lastOperationDisplay = document.getElementById("lastOperationDisplay");
+// const operatorBtns = document.querySelectorAll(".operator");
 
-const equalsBtn = document.getElementById("equalsBtn");
-const currentOperationDisplay = document.getElementById(
-  "currentOperationDisplay"
-);
-const lastOperationDisplay = document.getElementById("lastOperationDisplay");
-const operatorBtns = document.querySelectorAll(".operator");
+// let operators = ["+", "-", "*", "/"];
+// let currentInput = "";
+// let displayNumber = "0";
+// let firstOperand;
+// let operator;
+// let secondOperand;
+// let result;
 
-let operators = ["+", "-", "*", "/"];
-let currentInput = "";
-let displayNumber = "0";
-let firstOperand;
-let operator;
-let secondOperand;
-let result;
+// // UPDATE DISPLAY FUNCTION
+// const updateCurrentOperationDisplay = (value) => {
+//   currentOperationDisplay.innerHTML = value;
+// };
 
-// UPDATE DISPLAY FUNCTION
-const updateCurrentOperationDisplay = (value) => {
-  currentOperationDisplay.innerHTML = value;
-};
+// const updatelastOperationDisplayFirst = (
+//   firstOperand,
+//   operator,
+//   secondOperand
+// ) => {
+//   lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
+// };
 
-const updatelastOperationDisplayFirst = (
-  firstOperand,
-  operator,
-  secondOperand
-) => {
-  lastOperationDisplay.innerHTML = `${firstOperand} ${operator} ${secondOperand} =`;
-};
+// const updatelastOperationDisplaySecond = (valueOne, valueTwo) => {
+//   lastOperationDisplay.innerHTML = `${valueOne} ${valueTwo}`;
+// };
 
-const updatelastOperationDisplaySecond = (valueOne, valueTwo) => {
-  lastOperationDisplay.innerHTML = `${valueOne} ${valueTwo}`;
-};
+// const updatelastOperationDisplayThird = (value) => {
+//   lastOperationDisplay.innerHTML = value;
+// };
 
-const updatelastOperationDisplayThird = (value) => {
-  lastOperationDisplay.innerHTML = value;
-};
+// // ADD EVENT LISTENERS
 
-// ADD EVENT LISTENERS
+// function addEventListenersForAllOperators() {
+//   equalsBtn.addEventListener("click", handleEqualsBtnClick);
+//   operatorBtns.forEach((btn) => {
+//     btn.addEventListener("click", handleOperatorsClick);
+//   });
+// }
 
-function addEventListenersForAllOperators() {
-  equalsBtn.addEventListener("click", handleEqualsBtnClick);
-  operatorBtns.forEach((btn) => {
-    btn.addEventListener("click", handleOperatorsClick);
-  });
-}
+// // REMOVE EVENT LISTENERS
 
-// REMOVE EVENT LISTENERS
+// function removeEventListenerForEqualsBtn() {
+//   equalsBtn.removeEventListener("click", handleEqualsBtnClick);
+// }
 
-function removeEventListenerForEqualsBtn() {
-  equalsBtn.removeEventListener("click", handleEqualsBtnClick);
-}
+// function removeEventListenersForSomeOperators() {
+//   operatorBtns.forEach((btn) => {
+//     btn.removeEventListener("click", handleOperatorsClick);
+//   });
+// }
 
-function removeEventListenersForSomeOperators() {
-  operatorBtns.forEach((btn) => {
-    btn.removeEventListener("click", handleOperatorsClick);
-  });
-}
+// // HANDLE EQUALS OPERATOR CLICK
+// const handleEqualsBtnClick = () => {
+//   parser(currentInput);
 
+//   if (
+//     operator === "/" &&
+//     secondOperand === "0" &&
+//     (result === Infinity || result === -Infinity || result === NaN)
+//   ) {
+//     result = 0;
+//     updateCurrentOperationDisplay(displayNumber);
+//   }
+//   if (
+//     (operator !== "/" && secondOperand !== "0") ||
+//     (operator === "/" && secondOperand !== "0")
+//   ) {
+//     updateCurrentOperationDisplay(result);
+//     currentInput = result.toString();
+//     removeEventListenerForEqualsBtn();
+//     displayNumber = result.toString();
+//   }
+// };
 
-// HANDLE EQUALS OPERATOR CLICK
-const handleEqualsBtnClick = () => {
-  parser(currentInput);
+// // HANDLE OPERATORS CLICK
+// const handleOperatorsClick = () => {
+//   let currentInputTwo = currentInput.slice(0, -1);
+//   let searchOperator = currentInput[currentInput.length - 1];
 
-  if (
-    operator === "/" &&
-    secondOperand === "0" &&
-    (result === Infinity || result === -Infinity || result === NaN)
-  ) {
-    result = 0;
-    updateCurrentOperationDisplay(displayNumber);
-  }
-  if (
-    (operator !== "/" && secondOperand !== "0") ||
-    (operator === "/" && secondOperand !== "0")
-  ) {
-    updateCurrentOperationDisplay(result);
-    currentInput = result.toString();
-    removeEventListenerForEqualsBtn();
-    displayNumber = result.toString();
-  }
-};
+//   parser(currentInputTwo);
 
+//   if (
+//     result === Infinity ||
+//     result === -Infinity ||
+//     result === NaN ||
+//     result === 0
+//   ) {
+//     currentInput = "0";
+//     appendOperator(searchOperator);
 
-// HANDLE OPERATORS CLICK
-const handleOperatorsClick = () => {
-  let currentInputTwo = currentInput.slice(0, -1);
-  let searchOperator = currentInput[currentInput.length - 1];
+//     updateCurrentOperationDisplay(0);
+//   }
+//   if (
+//     (operator !== "/" && secondOperand !== "0") ||
+//     (operator === "/" && secondOperand !== "0")
+//   ) {
+//     updateCurrentOperationDisplay(result);
+//     currentInput = result.toString();
+//     displayNumber = result.toString();
+//     appendOperator(searchOperator);
+//   }
+// };
 
-  parser(currentInputTwo);
+// // DELETE NUMBER FUNCTION
 
-  if (
-    result === Infinity ||
-    result === -Infinity ||
-    result === NaN ||
-    result === 0
-  ) {
-    currentInput = "0";
-    appendOperator(searchOperator);
+// function deleteNumber() {
+//   if (displayNumber.length === 0) {
+//     return;
+//   }
+//   if (currentInput[currentInput.length - 1] !== currentInput.match(/[+\-*/]/)) {
+//     currentInput = currentInput.slice(0, -1);
+//     displayNumber = displayNumber.slice(0, -1);
+//   }
 
-    updateCurrentOperationDisplay(0);
-  }
-  if (
-    (operator !== "/" && secondOperand !== "0") ||
-    (operator === "/" && secondOperand !== "0")
-  ) {
-    updateCurrentOperationDisplay(result);
-    currentInput = result.toString();
-    displayNumber = result.toString();
-    appendOperator(searchOperator);
-  }
-};
+//   updateCurrentOperationDisplay(displayNumber);
 
-// DELETE NUMBER FUNCTION
+//   if (!currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/)) {
+//     removeEventListenerForEqualsBtn();
+//     removeEventListenersForSomeOperators();
+//   }
+// }
 
-function deleteNumber() {
-  if (displayNumber.length === 0) {
-    return;
-  }
-  if (currentInput[currentInput.length - 1] !== currentInput.match(/[+\-*/]/)) {
-    currentInput = currentInput.slice(0, -1);
-    displayNumber = displayNumber.slice(0, -1);
-  }
+// // CLEAR DISPLAY FUNCTION
+// function clearDisplay() {
+//   currentInput = "";
+//   displayNumber = "0";
 
-  updateCurrentOperationDisplay(displayNumber);
+//   updateCurrentOperationDisplay(displayNumber);
+//   updatelastOperationDisplayThird("");
+// }
 
-  if (!currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/)) {
-    removeEventListenerForEqualsBtn();
-    removeEventListenersForSomeOperators();
-  }
-}
+// // APPEND NUMBER FUNCTION
 
-// CLEAR DISPLAY FUNCTION
-function clearDisplay() {
-  currentInput = "";
-  displayNumber = "0";
+// function appendNumber(number) {
+//   if (displayNumber === "0" && operator === "/" && secondOperand === "0") {
+//     currentInput = currentInput.slice(0, -1);
+//     displayNumber = "";
+//   }
 
-  updateCurrentOperationDisplay(displayNumber);
-  updatelastOperationDisplayThird("");
-}
+//   if (displayNumber === "0" && currentInput.length === 0) {
+//     displayNumber = "";
+//   }
 
-// APPEND NUMBER FUNCTION
+//   if (
+//     currentInput[0] === "0" &&
+//     number === "0" &&
+//     !displayNumber.includes(".") &&
+//     !currentInput.includes(".") &&
+//     currentInput.includes(operator)
+//   ) {
+//     return;
+//   }
 
-function appendNumber(number) {
-  if (displayNumber === "0" && operator === "/" && secondOperand === "0") {
-    currentInput = currentInput.slice(0, -1);
-    displayNumber = "";
-  }
+//   if (displayNumber === "" && number === ".") {
+//     displayNumber = "0";
+//   }
 
-  if (displayNumber === "0" && currentInput.length === 0) {
-    displayNumber = "";
-  }
+//   if (number === "." && displayNumber.includes(".")) {
+//     return;
+//   }
 
-  if (
-    currentInput[0] === "0" &&
-    number === "0" &&
-    !displayNumber.includes(".") &&
-    !currentInput.includes(".") &&
-    currentInput.includes(operator)
-  ) {
-    return;
-  }
+//   displayNumber += number;
+//   currentInput += number;
 
-  if (displayNumber === "" && number === ".") {
-    displayNumber = "0";
-  }
+//   updateCurrentOperationDisplay(displayNumber);
 
-  if (number === "." && displayNumber.includes(".")) {
-    return;
-  }
+//   if (currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/))
+//     addEventListenersForAllOperators();
+// }
 
-  displayNumber += number;
-  currentInput += number;
+// // APPEND OPERATOR FUNCTION
+// function appendOperator(operator) {
+//   displayNumber = "";
 
-  updateCurrentOperationDisplay(displayNumber);
+//   if (currentInput.length === 0) {
+//     currentInput = "0";
+//   }
 
-  if (currentInput.match(/(-?\d*(\.\d+)?)([+\-*/])(-?\d*(\.\d+)?)/))
-    addEventListenersForAllOperators();
-}
+//   if (
+//     (currentInput.slice(-1) === "0" && currentInput.slice(-2, -1) === "/") ||
+//     (currentInput.slice(0, 1) === "0" && currentInput.slice(-1) === "0") ||
+//     result === Infinity ||
+//     result === -Infinity ||
+//     result === NaN
+//   ) {
+//     currentInput = "0";
+//     displayNumber = "";
+//   }
 
-// APPEND OPERATOR FUNCTION
-function appendOperator(operator) {
-  displayNumber = "";
+//   if (operators.includes(currentInput.slice(-1))) {
+//     currentInput = currentInput.slice(0, -1) + operator;
+//   } else {
+//     currentInput += operator;
+//   }
 
-  if (currentInput.length === 0) {
-    currentInput = "0";
-  }
+//   updatelastOperationDisplaySecond(currentInput.slice(0, -1), operator);
+//   removeEventListenerForEqualsBtn();
+// }
 
-  if (
-    (currentInput.slice(-1) === "0" && currentInput.slice(-2, -1) === "/") ||
-    (currentInput.slice(0, 1) === "0" && currentInput.slice(-1) === "0") ||
-    result === Infinity ||
-    result === -Infinity ||
-    result === NaN
-  ) {
-    currentInput = "0";
-    displayNumber = "";
-  }
+// // PARSER FUNCTION
+// function parser(expression) {
+//   let index;
+//   let sign;
 
-  if (operators.includes(currentInput.slice(-1))) {
-    currentInput = currentInput.slice(0, -1) + operator;
-  } else {
-    currentInput += operator;
-  }
+//   if (expression[0] === "-") {
+//     expression = expression.slice(1);
+//     sign = "-";
+//   }
 
-  updatelastOperationDisplaySecond(currentInput.slice(0, -1), operator);
-  removeEventListenerForEqualsBtn();
-}
+//   operators.forEach((op) => {
+//     if (expression.includes(op)) {
+//       index = expression.indexOf(op);
+//       firstOperand = expression.slice(0, index);
+//       operator = expression[index];
+//       secondOperand = expression.slice(index + 1, expression.length);
+//     }
+//   });
 
-// PARSER FUNCTION
-function parser(expression) {
-  let index;
-  let sign;
+//   if (sign) {
+//     firstOperand = sign + firstOperand;
+//   }
 
-  if (expression[0] === "-") {
-    expression = expression.slice(1);
-    sign = "-";
-  }
+//   if (operator == "/" && secondOperand === "0") {
+//     alert("Cannot divide by zero!");
+//   } else {
+//     updatelastOperationDisplayFirst(firstOperand, operator, secondOperand);
+//   }
 
-  operators.forEach((op) => {
-    if (expression.includes(op)) {
-      index = expression.indexOf(op);
-      firstOperand = expression.slice(0, index);
-      operator = expression[index];
-      secondOperand = expression.slice(index + 1, expression.length);
-    }
-  });
+//   operate(firstOperand, operator, secondOperand);
+// }
 
-  if (sign) {
-    firstOperand = sign + firstOperand;
-  }
+// // OPERATE FUNCTION
+// function operate(firstOperand, operator, secondOperand) {
+//   firstOperand = Number(firstOperand);
+//   secondOperand = Number(secondOperand);
 
-  if (operator == "/" && secondOperand === "0") {
-    alert("Cannot divide by zero!");
-  } else {
-    updatelastOperationDisplayFirst(firstOperand, operator, secondOperand);
-  }
+//   if (operator == "+") result = firstOperand + secondOperand;
+//   if (operator == "-") result = firstOperand - secondOperand;
+//   if (operator == "*") result = firstOperand * secondOperand;
+//   if (operator == "/") result = firstOperand / secondOperand;
 
-  operate(firstOperand, operator, secondOperand);
-}
+//   result = parseFloat(result.toFixed(3));
 
-// OPERATE FUNCTION
-function operate(firstOperand, operator, secondOperand) {
-  firstOperand = Number(firstOperand);
-  secondOperand = Number(secondOperand);
-
-  if (operator == "+") result = firstOperand + secondOperand;
-  if (operator == "-") result = firstOperand - secondOperand;
-  if (operator == "*") result = firstOperand * secondOperand;
-  if (operator == "/") result = firstOperand / secondOperand;
-
-  result = parseFloat(result.toFixed(3));
-
-  removeEventListenersForSomeOperators();
-}
+//   removeEventListenersForSomeOperators();
+// }
