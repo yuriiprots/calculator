@@ -1,5 +1,5 @@
 let firstOperand = "";
-let curentOperator = null;
+let currentOperator = null;
 let secondOperand = "";
 let shouldClearCurrentOperationDisplay = false;
 
@@ -8,8 +8,20 @@ const currentOperationDisplay = document.getElementById(
   "currentOperationDisplay"
 );
 
-const numberButtons = document.querySelectorAll("[data-number]"); // select all numbers
-const operatorButtons = document.querySelectorAll("[data-operator]"); // select all operators
+const numberButtons = document.querySelectorAll("[data-number]"); 
+const operatorButtons = document.querySelectorAll("[data-operator]"); 
+
+const equalsBtn = document.getElementById("equalsBtn");
+
+numberButtons.forEach((button) =>
+  button.addEventListener("click", () => appendNumber(button.textContent))
+);
+
+operatorButtons.forEach((button) =>
+  button.addEventListener("click", () => setOperator(button.textContent))
+);
+
+equalsBtn.addEventListener("click", () => evaluate());
 
 function appendNumber(number) {
   if (
@@ -26,9 +38,33 @@ function clearCurrentOperationDisplay() {
   shouldClearCurrentOperationDisplay = false;
 }
 
-numberButtons.forEach((button) =>
-  button.addEventListener("click", () => appendNumber(button.textContent))
-);
+function setOperator(operator) {
+  if (currentOperator !== null) evaluate();
+  firstOperand = currentOperationDisplay.textContent;
+  currentOperator = operator;
+  lastOperationDisplay.textContent = `${firstOperand} ${currentOperator}`;
+  shouldClearCurrentOperationDisplay = true;
+}
+
+function evaluate() {
+  if (currentOperator === null || shouldClearCurrentOperationDisplay) return;
+
+  if (currentOperator === "/" && currentOperationDisplay.textContent === "0") {
+    alert("Cannot divide by zero!");
+    return;
+  }
+
+  secondOperand = currentOperationDisplay.textContent;
+  currentOperationDisplay.textContent = operate(
+    currentOperator,
+    firstOperand,
+    secondOperand
+  );
+
+  lastOperationDisplay.textContent = `${firstOperand} ${currentOperator} ${secondOperand} =`;
+
+  currentOperator = null;
+}
 
 function add(a, b) {
   return a + b;
