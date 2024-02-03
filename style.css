@@ -65,6 +65,7 @@ button {
   padding: 20px;
   border: 2px solid var(--border);
   border-radius: 15px;
+  max-width: 350px;
   min-width: 350px;
   display: flex;
   flex-direction: column;

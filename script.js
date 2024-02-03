@@ -1,9 +1,34 @@
 let firstOperand = "";
 let curentOperator = null;
 let secondOperand = "";
+let shouldClearCurrentOperationDisplay = false;
 
-console.log(curentOperator);
-console.log(typeof curentOperator);
+const lastOperationDisplay = document.getElementById("lastOperationDisplay");
+const currentOperationDisplay = document.getElementById(
+  "currentOperationDisplay"
+);
+
+const numberButtons = document.querySelectorAll("[data-number]"); // select all numbers
+const operatorButtons = document.querySelectorAll("[data-operator]"); // select all operators
+
+function appendNumber(number) {
+  if (
+    currentOperationDisplay.textContent === "0" ||
+    shouldClearCurrentOperationDisplay
+  )
+    clearCurrentOperationDisplay();
+
+  currentOperationDisplay.textContent += number;
+}
+
+function clearCurrentOperationDisplay() {
+  currentOperationDisplay.textContent = "";
+  shouldClearCurrentOperationDisplay = false;
+}
+
+numberButtons.forEach((button) =>
+  button.addEventListener("click", () => appendNumber(button.textContent))
+);
 
 function add(a, b) {
   return a + b;
