@@ -8,10 +8,11 @@ const currentOperationDisplay = document.getElementById(
   "currentOperationDisplay"
 );
 
-const numberButtons = document.querySelectorAll("[data-number]"); 
-const operatorButtons = document.querySelectorAll("[data-operator]"); 
-
-const equalsBtn = document.getElementById("equalsBtn");
+const numberButtons = document.querySelectorAll("[data-number]");
+const operatorButtons = document.querySelectorAll("[data-operator]");
+const equalsButton = document.getElementById("equalsBtn");
+const clearButton = document.getElementById("clearBtn");
+const pointButton = document.getElementById("pointBtn");
 
 numberButtons.forEach((button) =>
   button.addEventListener("click", () => appendNumber(button.textContent))
@@ -21,7 +22,18 @@ operatorButtons.forEach((button) =>
   button.addEventListener("click", () => setOperator(button.textContent))
 );
 
-equalsBtn.addEventListener("click", () => evaluate());
+equalsButton.addEventListener("click", () => evaluate());
+clearButton.addEventListener("click", () => clear());
+pointButton.addEventListener("click", () => appendPoint());
+
+function clear() {
+  currentOperationDisplay.textContent = "0";
+  lastOperationDisplay.textContent = "";
+  firstOperand = "";
+  currentOperator = null;
+  secondOperand = "";
+  shouldClearCurrentOperationDisplay = false;
+}
 
 function appendNumber(number) {
   if (
@@ -31,6 +43,16 @@ function appendNumber(number) {
     clearCurrentOperationDisplay();
 
   currentOperationDisplay.textContent += number;
+}
+
+function appendPoint() {
+  if (shouldClearCurrentOperationDisplay) clearCurrentOperationDisplay();
+  if (currentOperationDisplay.textContent === "") {
+    currentOperationDisplay.textContent = "0";
+  }
+  if (currentOperationDisplay.textContent.includes(".")) return;
+
+  currentOperationDisplay.textContent += ".";
 }
 
 function clearCurrentOperationDisplay() {
@@ -55,15 +77,17 @@ function evaluate() {
   }
 
   secondOperand = currentOperationDisplay.textContent;
-  currentOperationDisplay.textContent = operate(
-    currentOperator,
-    firstOperand,
-    secondOperand
+  currentOperationDisplay.textContent = roundResult(
+    operate(currentOperator, firstOperand, secondOperand)
   );
 
   lastOperationDisplay.textContent = `${firstOperand} ${currentOperator} ${secondOperand} =`;
 
   currentOperator = null;
+}
+
+function roundResult(result) {
+  return Math.round(result * 1000) / 1000;
 }
 
 function add(a, b) {
