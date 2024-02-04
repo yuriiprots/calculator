@@ -12,6 +12,7 @@ const numberButtons = document.querySelectorAll("[data-number]");
 const operatorButtons = document.querySelectorAll("[data-operator]");
 const equalsButton = document.getElementById("equalsBtn");
 const clearButton = document.getElementById("clearBtn");
+const deleteButton = document.getElementById("deleteBtn");
 const pointButton = document.getElementById("pointBtn");
 
 numberButtons.forEach((button) =>
@@ -22,8 +23,10 @@ operatorButtons.forEach((button) =>
   button.addEventListener("click", () => setOperator(button.textContent))
 );
 
+window.addEventListener("keydown", handleKeyboardInput);
 equalsButton.addEventListener("click", () => evaluate());
 clearButton.addEventListener("click", () => clear());
+deleteButton.addEventListener("click", () => deleteNumber());
 pointButton.addEventListener("click", () => appendPoint());
 
 function clear() {
@@ -43,6 +46,12 @@ function appendNumber(number) {
     clearCurrentOperationDisplay();
 
   currentOperationDisplay.textContent += number;
+}
+
+function deleteNumber() {
+  currentOperationDisplay.textContent = currentOperationDisplay.textContent
+    .toString()
+    .slice(0, -1);
 }
 
 function appendPoint() {
@@ -85,9 +94,17 @@ function evaluate() {
 
   currentOperator = null;
 }
-
 function roundResult(result) {
   return Math.round(result * 1000) / 1000;
+}
+
+function handleKeyboardInput(e) {
+  if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+  if (e.key === ".") appendPoint();
+  if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/") setOperator(e.key);
+  if (e.key === "Enter" || e.key === "=") evaluate();
+  if (e.key === "Backspace") deleteNumber();
+  if (e.key === "Escape") clear();
 }
 
 function add(a, b) {
