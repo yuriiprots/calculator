@@ -1,7 +1,21 @@
 :root {
-  --primary-dark: #333333;
-  --primary-light: #ededed;
-  --secondary-light: #fefefe;
+  --background: #f6f6f6;
+  --font: #222;
+  --border: #333;
+  --display: #eee;
+  --calculator: #aaa;
+
+  --btn: #eee;
+  --btn-hover: #ddd;
+  --btn-active: #ccc;
+
+  --btn-red: #faa;
+  --btn-red-hover: #e99;
+  --btn-red-active: #d88;
+
+  --btn-blue: #aaf;
+  --btn-blue-hover: #99e;
+  --btn-blue-active: #88d;
 }
 
 * {
@@ -18,41 +32,54 @@
 }
 
 html {
+  /* footer support */
   position: relative;
   min-height: 100%;
 }
 
 body {
+  background-color: var(--background);
+  color: var(--font);
   font-family: "Roboto", sans-serif;
+  line-height: 1.6;
+  /* footer support */
   margin-bottom: 100px;
 }
 
-main {
+button {
+  cursor: pointer;
+}
+
+.main {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   margin-top: 50px;
+  height: 75vh;
+  min-height: 500px;
 }
 
 .calculator {
-  width: 400px;
-  border: 2px solid var(--primary-dark);
-  border-radius: 15px;
+  background-color: var(--calculator);
   padding: 20px;
+  border: 2px solid var(--border);
+  border-radius: 15px;
+  max-width: 350px;
+  min-width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  background-color: #aaa;
+  gap: 25px;
 }
 
 .display {
+  background-color: var(--display);
   text-align: right;
-  font-size: 30px;
   padding: 10px 20px;
-  border: 2px solid var(--primary-dark);
+  border: 2px solid var(--border);
   border-radius: 5px;
-  background-color: #fefefe;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .display-last {
@@ -66,46 +93,68 @@ main {
 }
 
 .buttons_container {
+  max-width: 400px;
+  min-width: 350px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
+  gap: 10px;
 }
 
-button {
-  cursor: pointer;
-}
+.btn {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: calc(12% - 10px);
+  /* flex-basis: 45px; */
+  /* flex: 1 0 calc(12% - 10px); */
 
-.button {
-  flex: 1 0 calc(10% - 10px);
   padding: 20px;
-  border: 2px solid var(--primary-dark);
+  border: 2px solid var(--border);
   border-radius: 5px;
-  background-color: #fefefe;
+  background-color: var(--btn);
   font-size: 20px;
 }
 
-.clear,
-.delete {
+.btn:hover {
+  background-color: var(--btn-hover);
+}
+
+.btn:active {
+  background-color: var(--btn-active);
+}
+
+.btn-red,
+.btn-blue {
   padding: 20px 0;
   font-size: 20px;
-  flex: 1 0 calc(50% - 10px);
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: calc(49% - 10px);
+  /* flex: 1 0 calc(49% - 10px); */
 }
 
-.clear {
-  background-color: rgba(245, 47, 25, 0.5);
+.btn-red {
+  background-color: var(--btn-red);
 }
 
-.delete {
-  background-color: rgba(25, 95, 245, 0.5);
+.btn-red:hover {
+  background-color: var(--btn-red-hover);
 }
 
-/* .operator {
-  background-color: rgba(5, 5, 5, 0.1);
-} */
+.btn-red:active {
+  background-color: var(--btn-red-active);
+}
 
-.operator.active {
-  background-color: rgba(0, 0, 0, 0.5);
+.btn-blue {
+  background-color: var(--btn-blue);
+}
+
+.btn-blue:hover {
+  background-color: var(--btn-blue-hover);
+}
+
+.btn-blue:active {
+  background-color: var(--btn-blue-active);
 }
 
 .footer {
@@ -122,7 +171,7 @@ button {
 }
 
 .fa-github {
-  color: var(--primary-dark);
+  color: var(--font);
   transition-property: transform;
   transition-duration: 0.4s;
   transition-timing-function: ease-in-out;
